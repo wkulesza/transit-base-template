@@ -1,8 +1,10 @@
 <?php
 
-/*
+/**
  * Various GTFS Utilites to extract information from the agency GTFS data
  * to populate the site and create route posts
+ *
+ * @package NWOTA
  */
 
 /*
@@ -18,6 +20,18 @@ function nwota_settings_page_content() {
 	?>
 	<div class="wrap">
 		<h2>GTFS Information and Settings</h2>
+		<?php settings_errors(); ?>
+		<div id="welcome-panel" class="welcome-panel">
+			<div class="welcome-panel-content">
+				<form method="post" action="options.php">
+					<?php
+					settings_fields('gtfs_url');
+					do_settings_sections('gtfs_url');
+					submit_button();
+					?>
+				</form>
+			</div>
+		</div>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( 'gtfs_fields' );
@@ -34,6 +48,11 @@ add_action( 'admin_init', 'nwota_setup_sections');
 function nwota_setup_sections() {
 	add_settings_section( 'display_options', 'Display Options', 'nwota_display_options', 'gtfs_fields');
 	add_settings_section( 'agency_information', 'Agency Information', 'nwota_agency_information', 'gtfs_fields');
+	add_settings_section( 'add_gtfs_url', 'Set GTFS Feed', 'nwota_gtfs_feed', 'gtfs_url');
+}
+
+function nwota_gtfs_feed() {
+	echo '<p class="about-description">Your feed will be used to populate the fields below.</p>';
 }
 
 function nwota_display_options() {
@@ -51,14 +70,13 @@ add_action( 'admin_init', 'nwota_setup_fields' );
  * here. Many but not all are populated from the GTFS feed. Setup code
  * adapted from https://www.smashingmagazine.com/2016/04/three-approaches-to-adding-configurable-fields-to-your-plugin/
  */
-
 function nwota_setup_fields() {
 	$fields = array(
 		array(
 			'uid' 		=> 'route_display', 	// unique id
 			'label' 	=> 'Route Display',		// field label
 			'section'	=> 'display_options',	// display section
-			'type'		=> 'select',				// input type
+			'type'		=> 'select',			// input type
 			'options'	=> array(
 				'long_name' => 'Long Name',
 				'short_name' => 'Short Name',
@@ -67,7 +85,9 @@ function nwota_setup_fields() {
 			'placeholder' => '',				// placeholder text
 			'helper'	=> '',					// displayed on right
 			'supplemental' => 'Choose how the route name should be displayed in menus and titles',				// display below field
-			'default' => 'long_name',					// default value
+			'default' => 'long_name',			// default value
+			'settings' => 'gtfs_fields',		// which settings form
+			'classes' => '',					// form field classes 
 		),
 		array(
 			'uid' 		=> 'agency_name',
@@ -79,6 +99,8 @@ function nwota_setup_fields() {
 			'helper'	=> '',
 			'supplemental' => '',
 			'default' => '',
+			'settings' => 'gtfs_fields',
+			'classes' => '',
 		),
 		array(
 			'uid' 		=> 'agency_number',
@@ -90,6 +112,8 @@ function nwota_setup_fields() {
 			'helper'	=> '',
 			'supplemental' => '',
 			'default' => '',
+			'settings' => 'gtfs_fields',
+			'classes' => '',
 		),
 		array(
 			'uid' 		=> 'agency_email',
@@ -101,14 +125,60 @@ function nwota_setup_fields() {
 			'helper'	=> '',
 			'supplemental' => '',
 			'default' => '',
+			'settings' => 'gtfs_fields',
+			'classes' => '',
+		),
+		array(
+			'uid' 		=> 'agency_description',
+			'label' 	=> 'Description',
+			'section'	=> 'agency_information',
+			'type'		=> 'textarea',
+			'options'	=> false,
+			'placeholder' => '',
+			'helper'	=> '',
+			'supplemental' => '',
+			'default' => '',
+			'settings' => 'gtfs_fields',
+			'classes' => '',		
+		),
+		array(
+			'uid' 		=> 'agency_mission',
+			'label' 	=> 'Mission Statement',
+			'section'	=> 'agency_information',
+			'type'		=> 'textarea',
+			'options'	=> false,
+			'placeholder' => '',
+			'helper'	=> '',
+			'supplemental' => '',
+			'default' => '',
+			'settings' => 'gtfs_fields',	
+			'classes' => '',	
+		),
+		array(
+			'uid' 		=> 'gtfs_feedurl',
+			'label' 	=> 'GTFS Feed URL',
+			'section'	=> 'add_gtfs_url',
+			'type'		=> 'text',
+			'options'	=> false,
+			'placeholder' => '',
+			'helper'	=> '',
+			'supplemental' => '',
+			'default' => '',
+			'settings' => 'gtfs_url',
+			'classes' => 'regular-text',		
 		),
 	);
 	foreach ( $fields as $field ) {
-		add_settings_field( $field['uid'], $field['label'], 'nwota_field_callback', 'gtfs_fields', $field['section'], $field);
-		register_setting( 'gtfs_fields', $field['uid'] );
+		add_settings_field( $field['uid'], $field['label'], 'nwota_field_callback', $field['settings'], $field['section'], $field);
+		register_setting( $field['settings'], $field['uid'] );
 	}
 }
 
+/**
+ * Print an appropriately formatted form field
+ *
+ * @param array $arguments Arguments for setting up a form field
+ */
 function nwota_field_callback( $arguments ) {
     $value = get_option( $arguments['uid'] ); 
     if( ! $value ) { 
@@ -120,10 +190,10 @@ switch( $arguments['type'] ){
             case 'password':
             case 'number':
 			case 'email' :
-                printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+                printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" class="%5$s"/>', $arguments['uid'], $arguments['type'], $arguments['placeholder'], esc_attr($value), $arguments['classes'] );
                 break;
             case 'textarea':
-                printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value );
+                printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], esc_textarea($value) );
                 break;
             case 'select':
             case 'multiselect':
@@ -136,7 +206,7 @@ switch( $arguments['type'] ){
                     if( $arguments['type'] === 'multiselect' ){
                         $attributes = ' multiple="multiple" ';
                     }
-                    printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
+                    printf( '<select name="%1$s" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
                 }
                 break;
             case 'radio':
@@ -164,11 +234,53 @@ switch( $arguments['type'] ){
    }
 }
 
+/*
+ * Action hook whenever the GTFS Feed URL is added or updated
+ */
+add_action('add_option_gtfs_feedurl', 'nwota_update_options');
+add_action('update_option_gtfs_feedurl', 'nwota_update_options');
+
+/**
+ * Download the GTFS feed to transit-modules/transit-data and
+ * update all gtfs options fields
+ */
+function nwota_update_options() {
+	$new_feed = esc_url( get_option('gtfs_feedurl') );
+	$upload_dir = get_template_directory()."/transit-modules/transit-data/";
+	//Name of the feed; Will rename downloaded feed
+	$feed_name = "gtfs-feed.zip";
+	if (!file_exists( $upload_dir )) {
+		mkdir( $upload_dir );
+	}
+	try {
+		file_put_contents($upload_dir.$feed_name, file_get_contents($new_feed));
+	} catch( Exception $ex ) {
+		add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'ERROR downloading GTFS Feed. Please check URL.', 'error');
+		return;
+	}
+	$zip = new ZipArchive;
+	$res = $zip->open( $upload_dir.$feed_name );
+	if ($res === TRUE ) {
+		$zip->extractTo( $upload_dir );
+		$zip->close();
+	} else {
+		add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'ERROR downloading GTFS Feed. Please check URL.', 'error');
+		return;
+	}
+	$agencyFile = file( $upload_dir . 'agency.txt');
+	foreach ($agencyFile as $line) {
+		var_dump(str_getcsv($line));
+	}	
+} 
+
+/**
+ * Display the GTFS Update settings pagea
+ */
 function nwota_gtfs_update_page() {
 	?>
 	<div class="wrap">
 		<h2>GTFS Site Update</h2>
-		<strong>DO NOT PERFORM AN UPDATE IF YOU ARE UNSURE OF WHAT YOU ARE DOING.</strong>
+		<strong>Do not perform an update if you are not sure what you are doing.</strong>
 		<br />
 		<form method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
 			<table class="form-table">
