@@ -136,7 +136,7 @@ require get_template_directory() . '/inc/jetpack.php';
  * Load Custom Post Types. Comment out/uncomment to toggle types.
  * Routes are required to use the GTFS utilities.
  */
-//require get_template_directory() . '/transit-modules/routes.php';
+require get_template_directory() . '/transit-modules/routes.php';
 //require get_template_directory() . '/transit-modules/rfps.php';
 //require get_template_directory() . '/transit-modules/alerts.php';
 //require get_template_directory() . '/transit-modules/board-meetings.php';

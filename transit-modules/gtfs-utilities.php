@@ -60,7 +60,7 @@ function nwota_display_options() {
 }
 
 function nwota_agency_information() {
-	echo 'Agency information is automatically updated from the GTFS feed. However, you may update it here to change how it is displayed, and add optional fields such as an agency description and mission statement.';
+	echo 'Some agency information is automatically updated from the GTFS feed. However, you may update it here to change how it is displayed, and add optional fields such as an agency description and mission statement.';
 }
 
 add_action( 'admin_init', 'nwota_setup_fields' );
@@ -100,7 +100,7 @@ function nwota_setup_fields() {
 			'supplemental' => '',
 			'default' => '',
 			'settings' => 'gtfs_fields',
-			'classes' => '',
+			'classes' => 'regular-text',
 		),
 		array(
 			'uid' 		=> 'agency_number',
@@ -126,7 +126,7 @@ function nwota_setup_fields() {
 			'supplemental' => '',
 			'default' => '',
 			'settings' => 'gtfs_fields',
-			'classes' => '',
+			'classes' => 'regular-text',
 		),
 		array(
 			'uid' 		=> 'agency_description',
@@ -247,7 +247,6 @@ add_action('update_option_gtfs_feedurl', 'nwota_update_options');
 function nwota_update_options() {
 	$new_feed = esc_url( get_option('gtfs_feedurl') );
 	$upload_dir = get_template_directory()."/transit-modules/transit-data/";
-	//Name of the feed; Will rename downloaded feed
 	$feed_name = "gtfs-feed.zip";
 	if (!file_exists( $upload_dir )) {
 		mkdir( $upload_dir );
@@ -268,9 +267,10 @@ function nwota_update_options() {
 		return;
 	}
 	$agencyFile = file( $upload_dir . 'agency.txt');
-	foreach ($agencyFile as $line) {
-		var_dump(str_getcsv($line));
-	}	
+	$agencyInfo = str_getcsv($agencyFile[1]);
+	update_option('agency_name',$agencyInfo[1]);
+	update_option('agency_number',$agencyInfo[4]);	
+	add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'Update successful. GTFS update automatically performed, please ensure that routes have been correctly added/updated.', 'updated');
 } 
 
 /**
@@ -282,7 +282,7 @@ function nwota_gtfs_update_page() {
 		<h2>GTFS Site Update</h2>
 		<strong>Do not perform an update if you are not sure what you are doing.</strong>
 		<br />
-		<form method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
+		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
 			<table class="form-table">
 				<tbody>
 					<tr>
@@ -294,6 +294,7 @@ function nwota_gtfs_update_page() {
 						</td>
 					</tr>
 					<input type="hidden" name="page" value="<?php echo get_template_directory();?>/functions.php">
+                    <input type="hidden" name="gtfsupdate_noncename" id="gtfsupdate_noncename" value="<?php echo wp_create_nonce( 'gtfs-update' )?>">
 					<input type="hidden" name="update" value="true" />
 				</tbody>
 			</table>
@@ -302,8 +303,14 @@ function nwota_gtfs_update_page() {
 			</p>
 		</form>	
 		<?php	
-		if(isset($_GET['update'])) {  //
-			if(! isset($_GET['backup'])) {
+		if(isset($_POST['update_core'])) {  //
+            if ( !wp_verify_nonce( $_POST['gtfsupdate_noncename'], 'gtfs-update' )) {
+                echo '<br />Illegal Source.';
+            }
+            if ( !current_user_can( 'edit_post', $post_id )) {
+                echo '<br />You do not have permission to perform GTFS Update. Please contact the admin.';
+            }
+			if(! isset($_POST['backup'])) {
 				echo '<br /><strong>Please verify you have backed up the site first.</strong>';
 			} else {
 				echo '<br /><br />Updating...';
@@ -314,7 +321,10 @@ function nwota_gtfs_update_page() {
 }
 
 function nwota_gtfs_update() {
-	
+	if ( !post_type_exists( 'route' ) ) {
+		return;
+	}
+    echo '<br />Performing Update';
 }
 
 
