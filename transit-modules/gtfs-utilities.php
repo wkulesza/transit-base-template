@@ -246,17 +246,24 @@ add_action('update_option_gtfs_feedurl', 'nwota_update_options');
  */
 function nwota_update_options() {
 	$new_feed = esc_url( get_option('gtfs_feedurl') );
+    // This is the directory for keeping the GTFS feed data. Should be located inside the theme.
+    // If changed, also update it nwota_gtfs_update()
 	$upload_dir = get_template_directory()."/transit-modules/transit-data/";
+    // Feed may be renamed to anything, not important. Will be unzipped momentarily.
 	$feed_name = "gtfs-feed.zip";
-	if (!file_exists( $upload_dir )) {
+	if ( !file_exists( $upload_dir ) ) {
 		mkdir( $upload_dir );
 	}
-	try {
-		file_put_contents($upload_dir.$feed_name, file_get_contents($new_feed));
-	} catch( Exception $ex ) {
+    // Ensure input is a well-formed URL
+    if (!filter_var($new_feed, FILTER_VALIDATE_URL)) {
 		add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'ERROR downloading GTFS Feed. Please check URL.', 'error');
 		return;
-	}
+    }
+    if ( !($gtfs_feed = file_get_contents($new_feed, true)) ) {
+		add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'ERROR downloading GTFS Feed. Please check URL.', 'error');
+		return;
+    }
+    file_put_contents($upload_dir.$feed_name, $gtfs_feed);
 	$zip = new ZipArchive;
 	$res = $zip->open( $upload_dir.$feed_name );
 	if ($res === TRUE ) {
@@ -267,14 +274,18 @@ function nwota_update_options() {
 		return;
 	}
 	$agencyFile = file( $upload_dir . 'agency.txt');
+    // This assumes only one agency is in agency.txt. Must be modified to handle GTFS for multi-agency site
+    // Also assumes order of columns in agency.txt
 	$agencyInfo = str_getcsv($agencyFile[1]);
+    // Get the 2nd column from agency.txt, which is agency_name
 	update_option('agency_name',$agencyInfo[1]);
+    // get the 5th column from agency.txt, which is agency_number
 	update_option('agency_number',$agencyInfo[4]);	
-	add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'Update successful. GTFS update automatically performed, please ensure that routes have been correctly added/updated.', 'updated');
+	add_settings_error('gtfs_feedurl_notice', 'gtfs_feed_url_notice', 'Update successful. You may update route information by performing GTFS Update now.', 'updated');
 } 
 
 /**
- * Display the GTFS Update settings pagea
+ * Display the GTFS Update settings page
  */
 function nwota_gtfs_update_page() {
 	?>
@@ -282,7 +293,7 @@ function nwota_gtfs_update_page() {
 		<h2>GTFS Site Update</h2>
 		<strong>Do not perform an update if you are not sure what you are doing.</strong>
 		<br />
-		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
+		<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 			<table class="form-table">
 				<tbody>
 					<tr>
@@ -293,9 +304,8 @@ function nwota_gtfs_update_page() {
 							<input type="checkbox" id="backup" name="backup" value="true" />
 						</td>
 					</tr>
-					<input type="hidden" name="page" value="<?php echo get_template_directory();?>/functions.php">
                     <input type="hidden" name="gtfsupdate_noncename" id="gtfsupdate_noncename" value="<?php echo wp_create_nonce( 'gtfs-update' )?>">
-					<input type="hidden" name="update" value="true" />
+					<input type="hidden" name="action" value="nwota_gtfs_update" />
 				</tbody>
 			</table>
 			<p class="submit">
@@ -303,107 +313,86 @@ function nwota_gtfs_update_page() {
 			</p>
 		</form>	
 		<?php	
-		if(isset($_POST['update_core'])) {  //
-            if ( !wp_verify_nonce( $_POST['gtfsupdate_noncename'], 'gtfs-update' )) {
-                echo '<br />Illegal Source.';
+		if(isset($_GET['submit_status'])) {  //
+            if( $_GET['submit_status'] == '100' ) {
+                echo '<div id="setting-error-settings_updated" class="error settings-error notice is-dismissible"><p>';
+                echo 'Submission Error: Illegal request.';
+                echo '</p></div>';
             }
-            if ( !current_user_can( 'edit_post', $post_id )) {
-                echo '<br />You do not have permission to perform GTFS Update. Please contact the admin.';
+            if( $_GET['submit_status'] == '101' ) {
+                echo '<div id="setting-error-settings_updated" class="error settings-error notice is-dismissible"><p>';
+                echo "Submission Error: Insufficient permissions. Please contact your admin.";
+                echo '</p></div>';
             }
-			if(! isset($_POST['backup'])) {
-				echo '<br /><strong>Please verify you have backed up the site first.</strong>';
-			} else {
-				echo '<br /><br />Updating...';
-				nwota_gtfs_update();
-			}
+            if( $_GET['submit_status'] == '102' ) {
+                echo '<div id="setting-error-settings_updated" class="error settings-error notice is-dismissible"><p>';
+                echo "Submission Error: Please confirm you have backed up site.";
+                echo '</p></div>';
+            }
+            if( $_GET['submit_status'] == '103' ) {
+                echo '<div id="setting-error-settings_updated" class="error settings-error notice is-dismissible"><p>';
+                echo "Submission Error: Routes not set up for this theme.";
+                echo '</p></div>';
+            }
+            if( $_GET['submit_status'] == '104' ) {
+                echo '<div id="setting-error-settings_updated" class="error settings-error notice is-dismissible"><p>';
+                echo "Submission Error: Please set GTFS feed correctly in GTFS settings first.";
+                echo '</p></div>';
+            }
+            if( $_GET['submit_status'] == '200' ) {
+                echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible"><p>';
+                echo "GTFS Update Success. Please ensure <strong>Routes</strong> contain correct information.";
+                echo '</p></div>';
+            }
 		}
 	echo '</div>';
 }
 
+add_action( 'admin_action_nwota_gtfs_update','nwota_gtfs_update' );
+
+/* 
+ * Create and update route custom posts from GTFS data
+ */
 function nwota_gtfs_update() {
+    // Ensure request came from correct screen
+    if ( !wp_verify_nonce( $_POST['gtfsupdate_noncename'], 'gtfs-update' )) {
+        wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=100');
+        exit();
+    }
+    // Ensure user has Admin capabilities
+    if ( !current_user_can( 'update_core')) {
+        wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=101');
+        exit();
+    }
+    // Ensure backup was checked
+	if(! isset($_POST['backup'])) {
+        wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=102');
+        exit();
+	} 
+    // Ensure this theme is actually using custom Route types
 	if ( !post_type_exists( 'route' ) ) {
-		return;
+        wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=103');
+        exit();
 	}
-    echo '<br />Performing Update';
-}
-
-
-/*
-function trillium_gtfs_update_settings_page() {
-?>
-	<div class="wrap">
-	<h1>GTFS Site Update</h1>
-	<h2>Synch Site with Live GTFS Data</h2>
-	<strong>DO NOT PERFORM AN UPDATE IF YOU ARE UNSURE OF WHAT YOU ARE DOING.</strong>
-	<br />
-	<form method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
-		<label for="backup">I verify that I have backed up the site before proceeding</label><input type="checkbox" id="backup" name="backup" value="true" /><br />
-		<input type="hidden" name="page" value="<?php echo get_template_directory();?>/functions.php">
-		<input type="hidden" name="update" value="true" />
-		<input type="submit" value="GTFS Update" />
-	</form>	
-	<?php	
-	if(isset($_GET['update'])) {  //
-		if(! isset($_GET['backup'])) {
-			echo '<br /><strong>Please verify you have backed up the site first.</strong>';
-		} else {
-			echo '<br /><br />Updating...';
-			gtfs_update();
-		}
-	}	
-}
-
-function gtfs_update() {
-	//The download link for the zipped GTFS feed
-	$feed_download = "http://data.trilliumtransit.com/gtfs/madera-ca-us/madera-ca-us.zip";
-	echo "<br />Downloading feed from: ".$feed_download."<br/>";
-	//The directory to upload transit data into
-	$upload_dir = get_template_directory()."/library/transit-data/";
-	//Name of the feed; Will rename downloaded feed
-	$feed_name = "madera-ca-us.zip";
-	file_put_contents($upload_dir.$feed_name, file_get_contents($feed_download));
-	$zip = new ZipArchive;
-	$res = $zip->open($upload_dir.$feed_name);
-	if ($res === TRUE ) {
-		$zip->extractTo($upload_dir);
-		$zip->close();
-	} else {
-		echo '<strong>ERROR OPENING FEED</strong>';
-		return;
-	}
-	
-	$handle = fopen($upload_dir."/routes.txt", "r");
-	if (! $handle) {
-		echo "<strong>ERROR opening routes.txt</strong>";
-		return;
-	}
-	$line_count = 0;
-	while (($line = fgets($handle)) !== FALSE) {
-		//Skip the column headers (i.e. the first line of the file)
-		if ($line_count == 0) {
-			$line_count++;
-			continue;
-		}
-		$line_split_by_quotes = explode("\"", $line);
-		$line    		= $line_split_by_quotes[0].$line_split_by_quotes[sizeof($line_split_by_quotes)-1];		
-		$splitLine          = explode(",", $line);
-		$agency_id          = $splitLine[0];
-		$route_id           = $splitLine[1];
-		$route_short_name   = $splitLine[2];
-		$route_long_name    = $splitLine[3];
-		$route_desc    		= $splitLine[4]; //implode('"',array_slice($line_split_by_quotes,1,sizeof($line_split_by_quotes)-2));
-		$route_type 		= $splitLine[5];
-		$route_url		 	= $splitLine[6];
-		$route_color 		= '#' . $splitLine[7];
-		$route_text_color 	= preg_replace('/^\s+|\n|\r|\s+$/m', '', $splitLine[8]); // strips line break on last entry
-		$route_sort_order 	= $splitLine[9]; // strips line break on last entry
-		
-		$tag_name = str_replace(" ", "_", strtolower($route_long_name));
-		
-		if ($route_long_name == "") {
-			continue;
-		}
-		
+    // Ensure transit data exists
+    $gtfs_file = get_template_directory()."/transit-modules/transit-data/routes.txt";
+    
+    if ( !file_exists( $gtfs_file ) ) {
+        wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=104');
+        exit();
+    }
+    // Once validated, perform GTFS Update
+    // Map column headers to key=>value pairs
+    $gtfs_data = array_map('str_getcsv', file($gtfs_file));
+    $header = array_shift($gtfs_data);
+    array_walk($gtfs_data, '_combine_array', $header);
+    
+    foreach( $gtfs_data as $ind=>$route ) {
+        // If route_long_name exists, use it as the default name for post title and name
+        $default_name = ($route['route_long_name'] == "") ? $route['route_short_name'] : $route['route_long_name'];
+        $tag_name = str_replace(" ", "_", strtolower($default_name));
+        $route_id = $route['route_id'];
+        	
 		//Check if the route post already exists. If not, create new route
 		$post_to_update_id = null;
 		$args = array(
@@ -411,23 +400,21 @@ function gtfs_update() {
 			'numberposts'	=> 1,
 			'post_status'	=> 'publish',
 			'meta_key'		=> 'route_id',
-			'meta_value'	=> $route_id
+			'meta_value'	=> $route_id,
 		);
 		$route_exists = get_posts( $args );
 		if ( $route_exists ) {
 			$post_to_update_id = $route_exists[0]->ID;
-			echo '<br />updating ' . $route_long_name;
 			$updated = array(
 				'ID'			=> $post_to_update_id,
-				'post_title'	=> $route_long_name,
+				'post_title'	=> $default_name,
 				'post_name'		=> $tag_name		
 			);
 			wp_update_post( $updated );
 		} else {
-			echo '<br />adding ' . $route_long_name;
 		
 			$my_post = array(
-			  'post_title'    	=> $route_long_name,
+			  'post_title'    	=> $default_name,
 			  'post_name' 		=> $tag_name,
 			  'post_status'  	=> 'publish',
 			  'post_type'      	=> 'route',
@@ -436,25 +423,19 @@ function gtfs_update() {
 			// Insert the post into the database
 			$post_to_update_id = wp_insert_post( $my_post );
 		}
-		
-		update_field('field_582b7ee44819c', $route_id, $post_to_update_id); 
-		update_field('field_5826588ad1c81', $route_short_name, $post_to_update_id); 
-		update_field('field_582658aad1c82',$route_long_name, $post_to_update_id); 
-		update_field('field_582658b1d1c83', $route_desc, $post_to_update_id); 
-		update_field('field_582658c3d1c84', $route_color, $post_to_update_id);
-		update_field('field_5841caa65fc32', floatval($route_sort_order), $post_to_update_id);
-		
-		/*
-		update_field('field_557b451a67dc8', $route_id, $post_to_update_id); 
-		update_field('field_557b458667dc9', $route_short_name, $post_to_update_id); 
-		update_field('field_557b459067dca',$route_long_name, $post_to_update_id); 
-		update_field('field_557b459867dcb', $route_desc, $post_to_update_id); 
-		update_field('field_557b45b367dcd', $route_text_color, $post_to_update_id); 
-		update_field('field_557b45a067dcc', $route_color, $post_to_update_id); 
-		update_field('field_5593f0425947f', floatval($route_sort_order), $post_to_update_id); 
-		$line_count++;
-
+        // Update route meta fields from GTFS data
+        foreach ( $route as $key=>$value ) {
+            if ( $key != "" ) {
+                update_post_meta($post_to_update_id, $key, $value);  
+            }          
+        }       
 	}
-	echo "<br /><strong>Site Update Complete</strong>";	
+    
+    wp_redirect( $_SERVER['HTTP_REFERER'] . '&submit_status=200');
+    exit();
 }
-*/
+
+// Array combine solution from dejiakala@gmail.com
+function _combine_array(&$row, $key, $header) {
+  $row = array_combine($header, $row);
+}

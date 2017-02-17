@@ -80,6 +80,12 @@ $route_fields = array(
         'type'      => 'text',
         'helper'    => '',
     ),
+    array(
+        'uid'       => 'agency_id',
+        'label'     => 'Agency ID',
+        'type'      => 'text',
+        'helper'    => '',
+    ),
 );
 
 // Create Custom Meta Fields for Routes, based on GTFS fields
@@ -111,17 +117,17 @@ function nwota_save_meta($post_id, $post) {
     }
     
     // If wordpress is performing an autosave, return without saving
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
             return $post_id;
     }
     
     // If the post data came from a different screen, return without saving
-    if ( !wp_verify_nonce( $_POST['routemeta_noncename'], 'save-meta-route-' . $post_id )) {
+    if ( !wp_verify_nonce( $_POST['routemeta_noncename'], 'save-meta-route-' . $post_id ) ) {
         return $post_id;
     }
     
     // If the user doesn't have proper capabilities, return without saving
-    if ( !current_user_can( 'edit_post', $post_id )) {
+    if ( !current_user_can( 'edit_post', $post_id ) ) {
         return $post_id;
     }
     
