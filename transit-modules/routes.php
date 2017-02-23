@@ -91,6 +91,54 @@ $route_fields = array(
 // Create Custom Meta Fields for Routes, based on GTFS fields
 function nwota_add_route_metabox() {
     add_meta_box( 'nwota_route_fields', 'GTFS Route Fields', 'nwota_custom_metabox', 'route', 'normal', 'default');
+    add_meta_box( 'nwota_route_fares', 'Route Fares', 'nwota_fares_metabox', 'route', 'normal',
+    'high');
+}
+
+function nwota_fares_metabox($post) {
+    if ( !class_exists( 'TablePress' ) ) {
+        $field_value = get_post_meta( $post->ID, 'route_fares_html', true);
+        echo '<p class="description">Download and activate the TablePress plugin to associate a fare table with this route. Otherwise, enter the table HTML below.</p>' ;
+        echo '<label for="route_fares_html">Route Fares Table HTML</label>';
+        printf( '<textarea name="route_fares_html" value="%s" class="large-text code" rows="10" cols="50"></textarea>',
+        $field_value);
+    } else {
+        $field_value = get_post_meta( $post->ID, 'route_fares_table', true);
+         echo '<p class="description">Create a fares table in TablePress, then select it below to associate it with this route.</p>' ;
+		$choices = array();
+
+		/* Exits function if TablePress not active */
+		if ( !defined( 'TABLEPRESS_ABSPATH' ) ) {
+		  echo __('TablePress must be activated for this ACF field to work', 'acf-tablepress');
+		  return;
+		}
+
+		/* get list of table ID and post ID pairs */
+		$table_json = get_option( 'tablepress_tables' );
+		$json_dec = json_decode( $table_json, true );
+		$tables = $json_dec['table_post'];
+
+		/* Get table titles for list of choices */
+		if ( !is_array( $tables ) || empty( $tables ) ) {
+		  echo sprintf( __('No TablePress tables found, once you <a href="%s">add some tables</a> they\'ll show up here.', 'acf-tablepress' ), admin_url( 'admin.php?page=tablepress') );
+		  return;
+		}
+		
+		foreach ($tables as $table_id => $post_id) {
+		  $post = get_post( $post_id );
+		  $choices[ $table_id ] = $post->post_title;
+		}
+
+	    asort( $choices );
+        echo '<label for="route_fares_table">Select Fare Table: </label>';
+        echo '<select name="route_fares_table">';
+        foreach( $choices as $id => $table ) {
+            $selected = ($field_value == $id) ? 'selected="selected"' : "";
+            printf( '<option value="%1$s" %2$s>%3$s</option>', $id, $selected, $table );
+        }
+        echo '</select>';
+        printf(' <a href="%s">Edit this table</a>', admin_url('admin.php?page=tablepress&action=edit&table_id=' . $field_value));
+    }
 }
 
 function nwota_custom_metabox($post) {
@@ -147,3 +195,42 @@ function nwota_save_meta($post_id, $post) {
 }
 
 add_action('save_post', 'nwota_save_meta', 1, 2);
+
+/******** Convenience Functions for Accessing Route Meta ************/
+/* Display Route Meta with options from GTFS Settings */
+
+// All functions the_route_[field]() are meant to be used either 
+// within the loop for a route post, or with the post->ID set
+// in the parameters
+
+function the_route_title($post_id = null) {
+    if ( empty($post_id) ) {
+        global $post;
+        $post_id = $post->ID;
+    }
+    $display_style = get_option('route_display');
+    if ($display_style == 'long_name') {
+        echo get_post_meta( $post_id, 'route_long_name', true);
+    } else if ($display_style == 'short_name') {
+        echo get_post_meta( $post_id, 'route_short_name', true);
+    } else if ($display_style == "circle_name" ) {
+        the_route_circle();
+        echo get_post_meta( $post_id, 'route_long_name', true);
+    } else {
+        return;
+    }
+}
+
+// Size is merely a class applied to the circle. Circle sizes can be 
+// implemented in the CSS.
+function the_route_circle($size = "medium", $post_id = null) {
+    if ( empty($post_id) ) {
+        global $post;
+        $post_id = $post->ID;
+    }
+    $route_color = get_post_meta( $post_id, 'route_color', true);
+    $text_color = get_post_meta( $post_id, 'route_text_color', true);
+    $text = get_post_meta( $post_id, 'route_short_name', true);
+    $html = sprintf('<span class="route-circle route-circle-%1$s" style="background-color: %2$s; color: %3$s;">%4$s</span>', $size, $route_color, $text_color, $text);
+    echo $html;
+}
