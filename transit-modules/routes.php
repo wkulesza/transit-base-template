@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Creates the Route custom post type. Used by gtfs-utilities.php
+ * in GTFS Update.
+ *
+ * @package NWOTA
+ */
+
+
 $labels = array(
 		'name'               => _x( 'Routes', 'post type general name' ),
 		'singular_name'      => _x( 'route', 'post type singular name' ),
@@ -233,4 +241,22 @@ function the_route_circle($size = "medium", $post_id = null) {
     $text = get_post_meta( $post_id, 'route_short_name', true);
     $html = sprintf('<span class="route-circle route-circle-%1$s" style="background-color: %2$s; color: %3$s;">%4$s</span>', $size, $route_color, $text_color, $text);
     echo $html;
+}
+
+// Change to be consistent with other funtions, use post_id
+function get_route_color($post_id = null) {
+    if ( empty($post_id) ) {
+        global $post;
+        $post_id = $post->ID;
+    }
+	$color = get_post_meta( $post_id, 'route_color', true);
+    if ( !$color ) {
+        $color = "#777"; // Sets the default color when none available.
+    }
+	return $color;
+}
+
+function get_route_by_name($route_name) {
+    $route = get_page_by_title($route_name, OBJECT, 'route');
+    return $route;
 }

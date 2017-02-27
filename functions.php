@@ -131,8 +131,9 @@ require get_template_directory() . '/inc/jetpack.php';
  * Routes are required to use the GTFS utilities.
  */
 require get_template_directory() . '/transit-modules/routes.php';
+require get_template_directory() . '/transit-modules/alerts.php';
+
 //require get_template_directory() . '/transit-modules/rfps.php';
-//require get_template_directory() . '/transit-modules/alerts.php';
 //require get_template_directory() . '/transit-modules/board-meetings.php';
 
 /**
