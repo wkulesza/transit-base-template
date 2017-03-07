@@ -101,6 +101,19 @@ function nwota_add_route_metabox() {
     add_meta_box( 'nwota_route_fields', 'GTFS Route Fields', 'nwota_custom_metabox', 'route', 'normal', 'default');
 }
 
+function nwota_custom_metabox($post) {
+    global $route_fields;
+    // Create nonce for security, verify where data originated
+    printf( '<input type="hidden" name="routemeta_noncename" id="routemeta_noncename" value="%s">', wp_create_nonce( 'save-meta-route-' . $post->ID ));
+    foreach ( $route_fields as $field ) {
+        $field_value = get_post_meta( $post->ID, $field['uid'], true);
+        printf( '<label for="%1$s">%2$s</label>', $field['uid'], $field['label'] );
+        printf( '<input type="%1$s" name="%2$s" value="%3$s" class="widefat" />', $field['type'], $field['uid'], $field_value );
+        if( $helper = $field['helper'] ){
+            printf( '<p class="description">%s</p>', $helper ); 
+        }
+    }
+}
 
 // Adapted from deluxeblogtips.com, original from Nathan Rice AgentPress theme
 function nwota_save_meta($post_id, $post) {
