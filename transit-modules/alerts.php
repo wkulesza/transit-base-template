@@ -103,8 +103,12 @@ function the_alert_zones( $post_id = null ) {
             // Requires using taxonomy terms created by nwota_alert_terms to ensure matching
             // the alert name
             $the_route = get_route_by_name( $term->name );
-	        $affected .= '<div class="post-tag" style="background-color:' . get_route_color( $the_route->ID ) . '">' . $term->name . '</div>';
-	    }
-    }
+            if ( 'true' == get_option('use_route_circles') ) {
+                $affected .= get_route_circle("small", $the_route->ID);
+            } else {
+	            $affected .= '<div class="post-tag" style="background-color:' . get_route_color( $the_route->ID ) . '">' . $term->name . '</div>';
+	        }
+        }
     echo $affected;
+    }
 }

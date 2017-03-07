@@ -90,6 +90,36 @@ function nwota_setup_fields() {
 			'classes' => '',					// form field classes 
 		),
 		array(
+			'uid' 		=> 'use_route_circles',
+			'label' 	=> 'Use Route Circles',
+			'section'	=> 'display_options',
+			'type'		=> 'radio',
+			'options'	=> array(
+			    'true'    => 'Yes',
+                'false'   => 'No',
+			),
+			'placeholder' => '',
+			'helper'	=> '',
+			'supplemental' => 'Only select "Yes" if routes are numbered and use the
+                number in the "route short name" field.',
+			'default' => 'false',
+			'settings' => 'gtfs_fields',
+			'classes' => '',
+		),
+		array(
+			'uid' 		=> 'google_api_key',
+			'label' 	=> 'Google API Key',
+			'section'	=> 'display_options',
+			'type'		=> 'text',
+			'options'	=> false,
+			'placeholder' => '',
+			'helper'	=> '',
+			'supplemental' => 'Required to use planner autocomplete and embedded google maps.',
+			'default' => '',
+			'settings' => 'gtfs_fields',
+			'classes' => 'regular-text',
+		),
+		array(
 			'uid' 		=> 'agency_name',
 			'label' 	=> 'Agency Name',
 			'section'	=> 'agency_information',
@@ -216,7 +246,7 @@ switch( $arguments['type'] ){
                     $iterator = 0;
                     foreach( $arguments['options'] as $key => $label ){
                         $iterator++;
-                        $options_markup .= sprintf( '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked( $value[ array_search( $key, $value, true ) ], $key, false ), $label, $iterator );
+                        $options_markup .= sprintf( '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked( $value, $key, false ), $label, $iterator );
                     }
                     printf( '<fieldset>%s</fieldset>', $options_markup );
                 }

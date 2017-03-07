@@ -99,69 +99,8 @@ $route_fields = array(
 // Create Custom Meta Fields for Routes, based on GTFS fields
 function nwota_add_route_metabox() {
     add_meta_box( 'nwota_route_fields', 'GTFS Route Fields', 'nwota_custom_metabox', 'route', 'normal', 'default');
-    add_meta_box( 'nwota_route_fares', 'Route Fares', 'nwota_fares_metabox', 'route', 'normal',
-    'high');
 }
 
-function nwota_fares_metabox($post) {
-    if ( !class_exists( 'TablePress' ) ) {
-        $field_value = get_post_meta( $post->ID, 'route_fares_html', true);
-        echo '<p class="description">Download and activate the TablePress plugin to associate a fare table with this route. Otherwise, enter the table HTML below.</p>' ;
-        echo '<label for="route_fares_html">Route Fares Table HTML</label>';
-        printf( '<textarea name="route_fares_html" value="%s" class="large-text code" rows="10" cols="50"></textarea>',
-        $field_value);
-    } else {
-        $field_value = get_post_meta( $post->ID, 'route_fares_table', true);
-         echo '<p class="description">Create a fares table in TablePress, then select it below to associate it with this route.</p>' ;
-		$choices = array();
-
-		/* Exits function if TablePress not active */
-		if ( !defined( 'TABLEPRESS_ABSPATH' ) ) {
-		  echo __('TablePress must be activated for this ACF field to work', 'acf-tablepress');
-		  return;
-		}
-
-		/* get list of table ID and post ID pairs */
-		$table_json = get_option( 'tablepress_tables' );
-		$json_dec = json_decode( $table_json, true );
-		$tables = $json_dec['table_post'];
-
-		/* Get table titles for list of choices */
-		if ( !is_array( $tables ) || empty( $tables ) ) {
-		  echo sprintf( __('No TablePress tables found, once you <a href="%s">add some tables</a> they\'ll show up here.', 'acf-tablepress' ), admin_url( 'admin.php?page=tablepress') );
-		  return;
-		}
-		
-		foreach ($tables as $table_id => $post_id) {
-		  $post = get_post( $post_id );
-		  $choices[ $table_id ] = $post->post_title;
-		}
-
-	    asort( $choices );
-        echo '<label for="route_fares_table">Select Fare Table: </label>';
-        echo '<select name="route_fares_table">';
-        foreach( $choices as $id => $table ) {
-            $selected = ($field_value == $id) ? 'selected="selected"' : "";
-            printf( '<option value="%1$s" %2$s>%3$s</option>', $id, $selected, $table );
-        }
-        echo '</select>';
-        printf(' <a href="%s">Edit this table</a>', admin_url('admin.php?page=tablepress&action=edit&table_id=' . $field_value));
-    }
-}
-
-function nwota_custom_metabox($post) {
-    global $route_fields;
-    // Create nonce for security, verify where data originated
-    printf( '<input type="hidden" name="routemeta_noncename" id="routemeta_noncename" value="%s">', wp_create_nonce( 'save-meta-route-' . $post->ID ));
-    foreach ( $route_fields as $field ) {
-        $field_value = get_post_meta( $post->ID, $field['uid'], true);
-        printf( '<label for="%1$s">%2$s</label>', $field['uid'], $field['label'] );
-        printf( '<input type="%1$s" name="%2$s" value="%3$s" class="widefat" />', $field['type'], $field['uid'], $field_value );
-        if( $helper = $field['helper'] ){
-            printf( '<p class="description">%s</p>', $helper ); 
-        }
-    }
-}
 
 // Adapted from deluxeblogtips.com, original from Nathan Rice AgentPress theme
 function nwota_save_meta($post_id, $post) {
@@ -222,8 +161,8 @@ function the_route_title($post_id = null) {
     } else if ($display_style == 'short_name') {
         echo get_post_meta( $post_id, 'route_short_name', true);
     } else if ($display_style == "circle_name" ) {
-        the_route_circle();
-        echo get_post_meta( $post_id, 'route_long_name', true);
+        $circ = the_route_circle();
+        echo $circ . get_post_meta( $post_id, 'route_long_name', true);
     } else {
         return;
     }
@@ -231,7 +170,11 @@ function the_route_title($post_id = null) {
 
 // Size is merely a class applied to the circle. Circle sizes can be 
 // implemented in the CSS.
-function the_route_circle($size = "medium", $post_id = null) {
+function get_route_circle($size = "medium", $post_id = null) {
+    // Check first that route circles are applicable 
+    if ( 'false' == get_option( 'use_route_circles' ) ) {
+        return;
+    }
     if ( empty($post_id) ) {
         global $post;
         $post_id = $post->ID;
@@ -240,7 +183,7 @@ function the_route_circle($size = "medium", $post_id = null) {
     $text_color = get_post_meta( $post_id, 'route_text_color', true);
     $text = get_post_meta( $post_id, 'route_short_name', true);
     $html = sprintf('<span class="route-circle route-circle-%1$s" style="background-color: %2$s; color: %3$s;">%4$s</span>', $size, $route_color, $text_color, $text);
-    echo $html;
+    return $html;
 }
 
 // Change to be consistent with other funtions, use post_id
