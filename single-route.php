@@ -14,11 +14,22 @@ get_header(); ?>
 
 		<?php
 		while ( have_posts() ) : the_post();
-
-			get_template_part( 'template-parts/content', get_post_type() );
-
-			the_post_navigation();
-
+		
+			the_route_title();
+			 
+		?>
+		
+			<div class="entry-content">
+				
+				<?php the_route_description(); ?>
+				
+				<?php tcp_do_alerts( array('collapse' => 'false' ) ); ?>
+				
+				<?php the_timetables(); ?>
+				
+			</div>
+		
+		<?php
 		endwhile; // End of the loop.
 		?>
 
