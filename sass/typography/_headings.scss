@@ -1,3 +1,29 @@
 h1, h2, h3, h4, h5, h6 {
 	clear: both;
+	margin-bottom: $margin-base;
+	font-weight: 700;
+	line-height: $text__heading-line-height;
+}
+
+// TFW you should really just write a power function but you don't
+
+h1 {
+	@include font-size($text__scaling * $text__scaling * $text__scaling * $text__scaling);
+	margin-top: 0;
+}
+h2 {
+	@include font-size($text__scaling * $text__scaling * $text__scaling);
+	margin-top: $margin-base * 1.5;
+}
+h3 {
+	@include font-size($text__scaling * $text__scaling);
+	margin-top: $margin-base * 1.5;
+}
+h4 {
+	@include font-size($text__scaling * 1);
+	margin-top: $margin-base;
+}
+h5, h6 {
+	@include font-size(1);
+	margin-top: $margin-base;
 }

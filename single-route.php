@@ -25,6 +25,8 @@ get_header(); ?>
 				
 				<?php tcp_do_alerts( array('collapse' => 'false' ) ); ?>
 				
+				<!-- TODO: Include option of timetable toggle buttons and JS -->
+				
 				<?php the_timetables(); ?>
 				
 			</div>

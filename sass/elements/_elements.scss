@@ -9,7 +9,7 @@ html {
 }
 
 body {
-	background: $color__background-body; /* Fallback for when there is no custom background color defined. */
+	background: $color__body;
 }
 
 blockquote, q {
@@ -22,21 +22,49 @@ blockquote, q {
 }
 
 hr {
-	background-color: $color__background-hr;
+	background-color: palette(mono, light);
 	border: 0;
 	height: 1px;
-	margin-bottom: 1.5em;
+	margin-bottom: $margin-base;
 }
 
 @import "lists";
 
-img {
+img, svg {
 	height: auto; /* Make sure images are scaled correctly. */
 	max-width: 100%; /* Adhere to container width. */
 }
 
 figure {
 	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
+}
+
+.hidden {
+	display: none;
+}
+
+.icon {
+	display: inline-block;
+}
+.icon svg {
+	position: relative;
+	fill: palette(mono, darkest);
+	width: auto;
+}
+.icon-small svg {
+	height: $text__base;
+	top: 2px;
+	margin-right: 4px;	
+}
+.icon-medium svg {
+	height: $text__base * $text__scaling;
+	top: 3px;
+	margin-right: 6px;
+}
+.icon-large svg {
+	height: $text__base * $text__scaling * $text__scaling;
+	top: 4px;
+	margin-right: 8px;
 }
 
 @import "tables";

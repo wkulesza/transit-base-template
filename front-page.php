@@ -11,29 +11,12 @@ get_header(); ?>
 
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main">
-			<?php
-			get_template_part( 'planner' );
-			?>
 			
-			<div id="homepage-image">
-				<?php
-				$args = array(
-					'post_type'			=> 'attachment',
-					'post_mime_type'	=> 'image',
-					'posts_per_page'	=> 1,
-					'post_name'			=> 'homepage_image',
-				);
-				$img_query = new WP_Query( $args );
-				printf( 
-					'<img src="%s" alt="featured homepage image" />',
-					$img_query->posts[0]->guid
-				);
-				?>
-			</div>
-
-			<?php
-			get_template_part( 'homepage-widgets' );
-			?>
+			<?php get_template_part( 'planner' ); ?>
+			
+			<?php tcp_do_alerts( array('collapse' => 'false', 'sep_affected' => ' ' ) ); ?>
+			
+			<?php get_template_part( 'homepage-widgets' ); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

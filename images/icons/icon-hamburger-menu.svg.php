@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 98 98" style="enable-background:new 0 0 98 98;" xml:space="preserve"><g><rect x="5.1" y="44" width="87.9" height="10.1"></rect><rect x="5.1" y="72.3" width="87.9" height="10.1"></rect><rect x="5.1" y="15.7" width="87.9" height="10.1"></rect></g></svg>

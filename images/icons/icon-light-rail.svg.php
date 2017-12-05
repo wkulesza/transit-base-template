@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;" viewBox="0 0 273 316" x="0px" y="0px" fill-rule="evenodd" clip-rule="evenodd"><defs><style type="text/css">
+   
+    .fil0 {fill:black}
+   
+  </style></defs><g><path class="fil0" d="M92 223c-1,3 -4,6 -6,8l50 0 51 0c-2,-2 -6,-5 -6,-8l-89 0zm107 -1l71 77c6,6 0,22 -6,15l-17 -18 -111 0c-36,0 -73,0 -110,0l-17 18c-7,7 -13,-9 -6,-15l71 -77c-19,-4 -33,-22 -33,-42l0 -106c0,-24 19,-43 43,-43l105 0c24,0 43,19 43,43l0 106c0,20 -14,38 -33,42zm-33 -173c8,0 8,14 0,14l-59 0c-8,0 -8,-14 0,-14l59 0zm32 24c11,0 19,9 19,19l0 44c0,10 -8,19 -19,19l-123 0c-11,0 -19,-9 -19,-19l0 -44c0,-10 8,-19 19,-19l123 0zm-120 98c8,0 15,6 15,14 0,8 -7,15 -15,15 -8,0 -15,-7 -15,-15 0,-8 7,-14 15,-14zm117 0c-8,0 -15,6 -15,14 0,8 7,15 15,15 8,0 15,-7 15,-15 0,-8 -7,-14 -15,-14zm-59 73l-61 0 -13 13 0 0 74 0 75 0 0 0 -13 -13 -62 0zm0 26l-86 0 -12 13 -1 1c33,0 66,0 99,0l100 0 -1 -1 -12 -13 -87 0z"></path><circle class="fil0" cx="136" cy="15" r="15"></circle></g></svg>

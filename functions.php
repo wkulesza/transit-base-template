@@ -141,6 +141,19 @@ function transit_base_template_scripts() {
 	wp_enqueue_script( 'transit-base-template-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'transit-base-template-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+	
+	if ( is_front_page() ) {
+		
+		/*****************************************************************
+		Uncomment and add API key to enable autocomplete on trip planner
+		(Must also edit planner.js to enable)
+		*****************************************************************/
+		
+		// wp_enqueue_script('google-maps', "https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=places", array(), false, true );
+		
+		wp_enqueue_script( 'transit-base-template-planner', get_template_directory_uri() . '/js/planner.js', array(), '20171129', true );
+		
+	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -149,16 +162,58 @@ function transit_base_template_scripts() {
 add_action( 'wp_enqueue_scripts', 'transit_base_template_scripts' );
 
 /**
- * Implement the Custom Header feature.
- */
-require get_template_directory() . '/inc/custom-header.php';
-
-/**
  * Custom template tags for this theme.
  */
 require get_template_directory() . '/inc/template-tags.php';
 
+function get_svg_icon($icon, $size="medium") {
+	$icon_file = $icon . '.svg';
+	printf('<span class="icon icon-%s icon-%s">', $icon, $size);
+	get_template_part('images/icons/icon', $icon_file);
+	echo '</span>';
+}
+
+/**
+ * Implement the Custom Header feature.
+ */
+/********************************** 
+DOESN'T EXIST IN INTERNAL TEMPLATE 
+**********************************/
+
+/* require get_template_directory() . '/inc/custom-header.php'; */
 /**
  * Customizer additions.
  */
-require get_template_directory() . '/inc/customizer.php';
+//require get_template_directory() . '/inc/customizer.php';
+
+/***********************************
+If the complementary plugin is not 
+installed, kind of make things work
+***********************************/
+
+if ( ! function_exists( 'tcp_do_alerts' ) ) :
+	function tcp_list_routes( $args = array() ) {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function the_route_title() {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function get_route_name($post_id = NULL) {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function get_route_circle($post_id = NULL, $size = "medium" ) {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function the_route_description() {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function tcp_do_alerts( $args = array() ) {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function the_timetables( $args = array() ) {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+	function tcp_get_affected( $post_id = null, $sep = ', ') {
+		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
+	}
+endif;
