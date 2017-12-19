@@ -2,6 +2,114 @@
 # Static Front Page
 ********************/
 
+// Planner
+#trip-planner {
+	max-width: 440px;
+	min-width: 270px;
+	margin-bottom: $margin-base;
+	margin-left: auto;
+	margin-right: auto;
+	
+	input {
+		width: 100%;
+		padding: 4px 6px;
+		border-radius: 2px;
+		border-color: palette(mono, dark);
+		border: 1px solid;
+	}
+	
+	.form-row {
+		margin-bottom: $margin-base;
+		
+		label {
+			display: block;
+			color: #222;
+		}
+		
+		button.crosshair-icon {
+			@include font-size(0.85);
+			float: right;
+			border: none;
+			background: transparent;
+			color: $color__text;
+			
+			&:hover {
+				color: $color__link-hover;
+				
+				svg {
+					fill: $color__link-hover;
+				}
+			}
+		} 
+	}
+	
+	#default-settings {
+		div > div {
+			display: inline-block;
+		}
+		button {
+			@include font-size(0.85);
+			background: transparent;
+			color: $color__link;
+			border: 1px solid $color__link;
+			padding: 2px 4px;
+			margin-left: 2px;
+		}
+	}
+	
+	button[type='submit'] {
+		width: 100%;
+	}
+	
+	#ftime, #fdate {
+		display: inline-block;
+		text-align: center;
+	}
+	#ftime {
+		width: 90px;
+		margin-right: 6px;
+	}
+	#fdate {
+		width: 110px;
+	}
+	
+}
+
+@media (min-width: 740px) {
+	.home #main > div {
+		float: left;
+	}
+	
+	.home {
+		#page > .content-wrap {
+			padding-top: $margin-base * 2;
+			padding-bottom: $margin-base * 2;
+		}
+		#trip-planner {
+			width: 40%;
+			padding-right: 0.5rem;
+		}
+		#homepage-image {
+			width: 60%;
+			padding-left: 1rem;
+		}
+		.tcp_alerts {
+			width: 60%;
+			padding-left: 1rem;
+			margin-top: $margin-base * 2;
+		}
+		#homepage-news {
+			width: 40%;
+			padding-right: 0.5rem;
+			margin-top: $margin-base * 2;
+			h2 {
+				margin-top: 0;
+				border-bottom: 1px solid;
+			}
+		}
+	}
+}
+
 /*****************
 # Routes
 ******************/
@@ -44,6 +152,34 @@
 /*****************
 # Alerts
 *****************/
+
+.tcp_alerts {
+	.tcp_alert_header {
+		margin: 0;
+		padding: 0.5rem 1rem;
+		background: palette(accent, alert);
+		color: #fff;
+	}
+	.container {
+		padding: 1rem;
+		border-left: 1px solid #aaa;
+		border-right: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+	}
+	h4 {
+		margin: 0;
+	}
+	.tcp_affected_routes {
+		display: block;
+		margin-top: 0.5rem;
+		@include font-size(1);
+	}
+	.panel_subheading {
+		margin-bottom: 1rem;
+		@include font-size(0.85);
+	}
+	
+}
 
 /*****************
 # Timetables

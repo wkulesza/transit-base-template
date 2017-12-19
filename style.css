@@ -1,5 +1,5 @@
 /*
-Theme Name: Transit Base Theme
+Theme Name: Transit Base Template
 Theme URI: http://github.com/trilliumtransit/
 Author: Trillium Transit
 Author URI: http://trilliumtransit.com
@@ -7,7 +7,7 @@ Description: A Master Template for Transit Themes
 Version: 1.0.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
-Text Domain: transit-base-theme
+Text Domain: transit-base-template
 Tags:
 
 This is a specialty theme designed for public transit agencies, to help 
@@ -225,7 +225,7 @@ body,
 input,
 select,
 textarea {
-  color: #727984;
+  color: #5a6069;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   font-size: 1rem;
@@ -238,23 +238,23 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2; }
 
 h1 {
-  font-size: 50.06411536px;
-  font-size: 3.12900721rem;
+  font-size: 39.0625px;
+  font-size: 2.44140625rem;
   margin-top: 0; }
 
 h2 {
-  font-size: 37.642192px;
-  font-size: 2.352637rem;
+  font-size: 31.25px;
+  font-size: 1.953125rem;
   margin-top: 34.8px; }
 
 h3 {
-  font-size: 28.3024px;
-  font-size: 1.7689rem;
+  font-size: 25px;
+  font-size: 1.5625rem;
   margin-top: 34.8px; }
 
 h4 {
-  font-size: 21.28px;
-  font-size: 1.33rem;
+  font-size: 20px;
+  font-size: 1.25rem;
   margin-top: 23.2px; }
 
 h5, h6 {
@@ -303,7 +303,7 @@ html {
   box-sizing: inherit; }
 
 body {
-  background: #f3f4f5; }
+  background: #fff; }
 
 blockquote, q {
   quotes: "" ""; }
@@ -315,6 +315,13 @@ hr {
   border: 0;
   height: 1px;
   margin-bottom: 23.2px; }
+
+#content,
+#header-content,
+#footer-content {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto; }
 
 ul, ol {
   margin: 23.2px 0 23.2px 34.8px; }
@@ -345,7 +352,8 @@ img, svg {
   height: auto;
   /* Make sure images are scaled correctly. */
   max-width: 100%;
-  /* Adhere to container width. */ }
+  /* Adhere to container width. */
+  width: 100%; }
 
 figure {
   margin: 1em 0;
@@ -359,7 +367,7 @@ figure {
 
 .icon svg {
   position: relative;
-  fill: #727984;
+  fill: #5a6069;
   width: auto; }
 
 .icon-small svg {
@@ -368,14 +376,17 @@ figure {
   margin-right: 4px; }
 
 .icon-medium svg {
-  height: 21.28px;
+  height: 20px;
   top: 3px;
   margin-right: 6px; }
 
 .icon-large svg {
-  height: 28.3024px;
+  height: 25px;
   top: 4px;
   margin-right: 8px; }
+
+.content-wrap {
+  padding: 23.2px; }
 
 table {
   margin: 0 0 23.2px;
@@ -384,6 +395,17 @@ table {
 /*************************************
 **             FORMS                **
 *************************************/
+button {
+  border-radius: 2px;
+  border: 1px solid #1d2731;
+  background: #0b3c5d;
+  color: #fff;
+  padding: 4px 6px;
+  transition: background 0.1s linear; }
+  button:hover {
+    background: #328cc1;
+    color: #1d2731; }
+
 /*--------------------------------------------------------------
 # Navigation
 --------------------------------------------------------------*/
@@ -391,11 +413,11 @@ table {
 ## Links
 --------------------------------------------------------------*/
 a {
-  color: #0b7a75; }
+  color: #328cc1; }
   a:visited {
-    color: #004441; }
+    color: #0b3c5d; }
   a:hover, a:focus, a:active {
-    color: #29335c; }
+    color: #d9b310; }
   a:focus {
     outline: thin dotted; }
   a:hover, a:active {
@@ -407,8 +429,7 @@ a {
 .main-navigation {
   clear: both;
   display: block;
-  float: left;
-  width: 100%; }
+  float: right; }
   .main-navigation ul {
     display: none;
     list-style: none;
@@ -416,7 +437,7 @@ a {
     padding-left: 0; }
     .main-navigation ul ul {
       box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-      float: left;
+      float: right;
       position: absolute;
       top: 23.2px;
       left: -999em;
@@ -448,7 +469,13 @@ a {
     display: none; }
 
   .main-navigation ul {
-    display: block; } }
+    display: block; }
+
+  #primary-menu > li {
+    margin-left: 23.2px;
+    font-size: 18px;
+    font-size: 1.125rem;
+    font-weight: bold; } }
 .site-main .comment-navigation,
 .site-main .posts-navigation,
 .site-main .post-navigation {
@@ -461,6 +488,18 @@ a {
   float: right;
   text-align: right;
   width: 50%; }
+
+#colophon .menu ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+  width: 100%; }
+  #colophon .menu ul > li {
+    display: inline-block;
+    padding: 23.2px; }
+    #colophon .menu ul > li a {
+      text-decoration: none; }
 
 /*--------------------------------------------------------------
 # Accessibility
@@ -483,7 +522,7 @@ a {
     box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
     clip: auto !important;
     clip-path: none;
-    color: #727984;
+    color: #5a6069;
     display: block;
     font-size: 14px;
     font-size: 0.875rem;
@@ -528,6 +567,8 @@ a {
 .clear:after,
 .entry-content:before,
 .entry-content:after,
+.content-area:before,
+.content-area:after,
 .comment-content:before,
 .comment-content:after,
 .site-header:before,
@@ -542,6 +583,7 @@ a {
 
 .clear:after,
 .entry-content:after,
+.content-area:after,
 .comment-content:after,
 .site-header:after,
 .site-content:after,
@@ -559,6 +601,39 @@ a {
 /*--------------------------------------------------------------
 # Content
 --------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Site-wide elements
+--------------------------------------------------------------*/
+#masthead {
+  background: #328cc1;
+  padding: 0 23.2px;
+  color: #fff; }
+  #masthead a {
+    color: rgba(255, 255, 255, 0.8); }
+  #masthead p {
+    margin: 0; }
+  #masthead .site-branding {
+    margin-top: 23.2px; }
+  #masthead .custom-logo-link {
+    display: block;
+    max-width: 50%;
+    max-height: 80px; }
+    #masthead .custom-logo-link img {
+      width: auto;
+      height: 80px; }
+
+#colophon {
+  background: #1d2731;
+  color: #fff;
+  padding: 23.2px 23.2px 34.8px; }
+  #colophon a {
+    color: #fff; }
+  #colophon .site-info {
+    font-size: 13.6px;
+    font-size: 0.85rem;
+    position: absolute;
+    right: 0; }
+
 /*--------------------------------------------------------------
 ## Posts and pages
 --------------------------------------------------------------*/
@@ -591,6 +666,79 @@ a {
 /*******************
 # Static Front Page
 ********************/
+#trip-planner {
+  max-width: 440px;
+  min-width: 270px;
+  margin-bottom: 23.2px;
+  margin-left: auto;
+  margin-right: auto; }
+  #trip-planner input {
+    width: 100%;
+    padding: 4px 6px;
+    border-radius: 2px;
+    border-color: #a8adb4;
+    border: 1px solid; }
+  #trip-planner .form-row {
+    margin-bottom: 23.2px; }
+    #trip-planner .form-row label {
+      display: block;
+      color: #222; }
+    #trip-planner .form-row button.crosshair-icon {
+      font-size: 13.6px;
+      font-size: 0.85rem;
+      float: right;
+      border: none;
+      background: transparent;
+      color: #5a6069; }
+      #trip-planner .form-row button.crosshair-icon:hover {
+        color: #d9b310; }
+        #trip-planner .form-row button.crosshair-icon:hover svg {
+          fill: #d9b310; }
+  #trip-planner #default-settings div > div {
+    display: inline-block; }
+  #trip-planner #default-settings button {
+    font-size: 13.6px;
+    font-size: 0.85rem;
+    background: transparent;
+    color: #328cc1;
+    border: 1px solid #328cc1;
+    padding: 2px 4px;
+    margin-left: 2px; }
+  #trip-planner button[type='submit'] {
+    width: 100%; }
+  #trip-planner #ftime, #trip-planner #fdate {
+    display: inline-block;
+    text-align: center; }
+  #trip-planner #ftime {
+    width: 90px;
+    margin-right: 6px; }
+  #trip-planner #fdate {
+    width: 110px; }
+
+@media (min-width: 740px) {
+  .home #main > div {
+    float: left; }
+
+  .home #page > .content-wrap {
+    padding-top: 46.4px;
+    padding-bottom: 46.4px; }
+  .home #trip-planner {
+    width: 40%;
+    padding-right: 0.5rem; }
+  .home #homepage-image {
+    width: 60%;
+    padding-left: 1rem; }
+  .home .tcp_alerts {
+    width: 60%;
+    padding-left: 1rem;
+    margin-top: 46.4px; }
+  .home #homepage-news {
+    width: 40%;
+    padding-right: 0.5rem;
+    margin-top: 46.4px; }
+    .home #homepage-news h2 {
+      margin-top: 0;
+      border-bottom: 1px solid; } }
 /*****************
 # Routes
 ******************/
@@ -628,6 +776,28 @@ a {
 /*****************
 # Alerts
 *****************/
+.tcp_alerts .tcp_alert_header {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: #e4572e;
+  color: #fff; }
+.tcp_alerts .container {
+  padding: 1rem;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa; }
+.tcp_alerts h4 {
+  margin: 0; }
+.tcp_alerts .tcp_affected_routes {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 16px;
+  font-size: 1rem; }
+.tcp_alerts .panel_subheading {
+  margin-bottom: 1rem;
+  font-size: 13.6px;
+  font-size: 0.85rem; }
+
 /*****************
 # Timetables
 *****************/

@@ -1,4 +1,52 @@
 /*--------------------------------------------------------------
+## Site-wide elements
+--------------------------------------------------------------*/
+
+#masthead {
+	background: palette(primary, light);
+	padding: 0 $margin-base;
+	color: #fff;
+	
+	a {
+		color: rgba(255,255,255,0.8);
+	}
+	
+	p {
+		margin: 0;
+	}
+	.site-branding {
+		margin-top: $margin-base;
+	}
+	
+	.custom-logo-link {
+		display: block;
+		max-width: 50%;
+		max-height: 80px;
+		
+		img {
+			width: auto;
+			height: 80px;
+		}
+	}
+}
+
+#colophon {
+	background: palette(primary, dark);
+	color: #fff;
+	padding: $margin-base $margin-base ($margin-base * 1.5);
+	
+	a {
+		color: #fff;
+	}
+	
+	.site-info {
+		@include font-size(0.85);
+		position: absolute;
+		right: 0;
+	}
+}
+
+/*--------------------------------------------------------------
 ## Posts and pages
 --------------------------------------------------------------*/
 @import "posts-and-pages";

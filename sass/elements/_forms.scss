@@ -1,4 +1,18 @@
 // Buttons
 
+button {
+	border-radius: 2px;
+	border: 1px solid palette(primary,dark);
+	background: palette(primary, base);
+	color: #fff;
+	padding: 4px 6px;
+	transition: background 0.1s linear;
+	
+	&:hover {
+		background: palette(primary, light);
+		color: palette(primary, dark);
+	}
+}
+
 
 // Fields

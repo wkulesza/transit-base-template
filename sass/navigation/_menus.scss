@@ -1,8 +1,7 @@
 .main-navigation {
 	clear: both;
 	display: block;
-	float: left;
-	width: 100%;
+	float: right;
 
 	ul {
 		display: none;
@@ -12,7 +11,7 @@
 
 		ul {
 			box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-			float: left;
+			float: right;
 			position: absolute;
 			top: $margin-base;
 			left: -999em;
@@ -83,6 +82,11 @@
 	.main-navigation ul {
 		display: block;
 	}
+	#primary-menu > li {
+		margin-left: $margin-base;
+		@include font-size(1.125);
+		font-weight: bold;
+	}
 }
 
 .comment-navigation,
@@ -103,5 +107,22 @@
 		float: right;
 		text-align: right;
 		width: 50%;
+	}
+}
+
+#colophon .menu ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-align: center;
+	width: 100%;
+	
+	& > li {
+		display: inline-block;
+		padding: $margin-base;
+		
+		a {
+			text-decoration: none;
+		}
 	}
 }
