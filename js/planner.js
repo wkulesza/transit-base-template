@@ -13,25 +13,6 @@
 		});
 	}
 	
-	// Not the prettiest function, but display time in correct format in form fields
-	
-	function formatTime(d) {
-		var hh = d.getHours(); 
-		var m = d.getMinutes(); 
-		var dd = "AM"; 
-		var h = hh; 
-		if (h >= 12) { 
-			h = hh-12; 
-			dd = "PM"; 
-		} 
-		if (h == 0) { 
-			h = 12; 
-		} 
-		m = m<10?"0"+m:m; 
-
-		return h+':'+m+' '+dd;
-	}
-	
 	// For use with Google Places API
 	// Must have valid API key and depends on script loaded first
 	function initializeAutocomplete() {
@@ -87,12 +68,15 @@
 	}
 	
 	function plannerSetup() {
-		var timeField = document.getElementById('ftime');
-		var dateField = document.getElementById('fdate');
-		var now = new Date();
-		mm = now.getMonth() + 1;
-		dateField.value = mm + '/' + now.getDate() + '/' + now.getFullYear();
-		timeField.value = formatTime(now);
+		flatpickr("#fdate", {
+			defaultDate: 'today',
+			dateFormat: 'm/d/Y'
+		});
+		flatpickr("#ftime", {
+			enableTime: true,
+			noCalendar: true,
+			dateFormat: "h:i K",
+		}).setDate(new Date(), false, 'h:i K');
 	}
 	
 	plannerSetup();
