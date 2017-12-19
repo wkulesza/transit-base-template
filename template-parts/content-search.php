@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
- * @package NWOTA
+ * @package Transit_Base_Template
  */
 
 ?>
@@ -15,7 +15,7 @@
 
 		<?php if ( 'post' === get_post_type() ) : ?>
 		<div class="entry-meta">
-			<?php nwota_posted_on(); ?>
+			<?php transit_base_template_posted_on(); ?>
 		</div><!-- .entry-meta -->
 		<?php endif; ?>
 	</header><!-- .entry-header -->
@@ -25,6 +25,6 @@
 	</div><!-- .entry-summary -->
 
 	<footer class="entry-footer">
-		<?php nwota_entry_footer(); ?>
+		<?php transit_base_template_entry_footer(); ?>
 	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->
