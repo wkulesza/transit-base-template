@@ -57,7 +57,7 @@ If you're interested in submitting code, please read through the current issue l
 
 ## Credits
 
-Theme created by Trillium Solutions, Inc for the Northwest Oregon Transportion Association. 
+Theme created by Trillium Solutions, Inc for the Northwest Oregon Transit Alliance 
 
 Based on _s by Automattic
 
