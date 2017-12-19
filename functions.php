@@ -142,6 +142,10 @@ function transit_base_template_scripts() {
 
 	wp_enqueue_script( 'transit-base-template-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 	
+	/*****************************************************************
+	Change this conditional if planner is used on additional pages
+	*****************************************************************/
+	
 	if ( is_front_page() ) {
 		
 		/*****************************************************************
@@ -151,7 +155,11 @@ function transit_base_template_scripts() {
 		
 		// wp_enqueue_script('google-maps', "https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=places", array(), false, true );
 		
-		wp_enqueue_script( 'transit-base-template-planner', get_template_directory_uri() . '/js/planner.js', array(), '20171129', true );
+		wp_enqueue_style( 'flatpickr-styles', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
+		
+		wp_enqueue_script( 'flatpickr', 'https://cdn.jsdelivr.net/npm/flatpickr', array(), false, true );
+		
+		wp_enqueue_script( 'transit-base-template-planner', get_template_directory_uri() . '/js/planner.js', array('flatpickr'), '20171129', true );
 		
 	}
 
@@ -176,44 +184,44 @@ function get_svg_icon($icon, $size="medium") {
 /**
  * Implement the Custom Header feature.
  */
-/********************************** 
-DOESN'T EXIST IN INTERNAL TEMPLATE 
-**********************************/
+require get_template_directory() . '/inc/custom-header.php';
 
-/* require get_template_directory() . '/inc/custom-header.php'; */
 /**
  * Customizer additions.
  */
-//require get_template_directory() . '/inc/customizer.php';
+require get_template_directory() . '/inc/customizer.php';
 
-/***********************************
-If the complementary plugin is not 
-installed, kind of make things work
-***********************************/
+/**
+ * Customizer additions.
+ */
+require get_template_directory() . '/inc/jetpack.php';
 
-if ( ! function_exists( 'tcp_do_alerts' ) ) :
-	function tcp_list_routes( $args = array() ) {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function the_route_title() {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function get_route_name($post_id = NULL) {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function get_route_circle($post_id = NULL, $size = "medium" ) {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function the_route_description() {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function tcp_do_alerts( $args = array() ) {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function the_timetables( $args = array() ) {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-	function tcp_get_affected( $post_id = null, $sep = ', ') {
-		echo 'PLEASE INSTALL THE TRANSIT CUSTOM POSTS PLUGIN TO USE ANYTHING';
-	}
-endif;
+/**
+ * Handle Plugin Dependency
+*/
+require_once get_template_directory() . '/inc/class-tgm-plugin-activation.php';
+
+add_action( 'tgmpa_register', 'transit_base_template_register_required_plugin');
+
+function transit_base_template_register_required_plugin() {
+	
+	$plugins = array( array(
+		'name'			=> 'Transit Custom Posts',
+		'slug'			=> 'transit-custom-posts',
+		'source'		=> 'https://github.com/trilliumtransit/transit-custom-posts/archive/master.zip',
+		'required'		=> true,
+		'external_url' 	=> 'https://github.com/trilliumtransit/transit-custom-posts'
+	) );
+	
+	$config = array(
+		'id'			=> 'transit-base-template',
+		'default_path'	=> '',
+		'menu'			=> 'tgmpa-install-plugins',
+		'parent_slug'	=> 'themes.php',
+		'capability'	=> 'edit_theme_options',
+		'has_notices'	=> true,
+		'dismissable'	=> false,
+		'is_automatic'	=> true
+	);
+	tgmpa( $plugins, $config );
+}
