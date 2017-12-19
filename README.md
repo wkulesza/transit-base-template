@@ -58,11 +58,9 @@ If you're interested in submitting code, please read through the current issue l
 ## Credits
 
 Theme created by Trillium Solutions, Inc for the Northwest Oregon Transportion Association. 
+
 Based on _s by Automattic
+
 Icons from The Noun Project
-
-
-Author: Nome Dickerson 2017 
-Email: nome@trilliumtransit.com
 
 
