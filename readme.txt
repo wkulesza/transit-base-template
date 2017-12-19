@@ -1,19 +1,23 @@
-=== NWOTA ===
+=== Transit Base Template ===
 
 Contributors: automattic
 Tags: translation-ready, custom-background, theme-options, custom-menu, post-formats, threaded-comments
 
 Requires at least: 4.0
-Tested up to: 4.7
+Tested up to: 4.9
 Stable tag: 1.0.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 
-A starter theme called NWOTA, or underscores.
+A starter theme template based on underscores, tailored for transit sites.
 
 == Description ==
 
-Hi. I'm a starter theme called NWOTA, or underscores, if you like. I'm a theme meant for hacking so don't use me as a Parent Theme. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
+This is a starter theme meant to work in tandem with the [Transit Custom Posts](https://github.com/trilliumtransit/transit-custom-posts) plugin.
+The Transit Base Template can be used as a starting point for integrating GTFS data into your Wordpress site or 
+even just a working example for how to use the functions from the Transit Custom Posts API. We don't recommend using
+this theme as a parent theme just yet, at least not until a more stable release.
+
 
 == Installation ==
 
@@ -25,14 +29,14 @@ Hi. I'm a starter theme called NWOTA, or underscores, if you like. I'm a theme m
 
 = Does this theme support any plugins? =
 
-NWOTA includes support for Infinite Scroll in Jetpack.
+Transit Base Template requires the Transit Custom Posts plugin, and includes support for Infinite Scroll in Jetpack.
 
 == Changelog ==
 
-= 1.0 - May 12 2015 =
+= 0.1.0 - December 2017 =
 * Initial release
 
 == Credits ==
 
-* Based on Underscores http://underscores.me/, (C) 2012-2016 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
+* Based on Underscores http://underscores.me/, (C) 2012-2017 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 * normalize.css http://necolas.github.io/normalize.css/, (C) 2012-2016 Nicolas Gallagher and Jonathan Neal, [MIT](http://opensource.org/licenses/MIT)
