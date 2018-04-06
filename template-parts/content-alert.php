@@ -1,4 +1,4 @@
-?php
+<?php
 /**
  * Template part for displaying alerts
  *
@@ -17,7 +17,7 @@
 	<div class="entry-content">
 		<?php the_content(); ?>
 		
-    <div>
+		<div>
 			Affected Routes: <?php echo tcp_get_affected( $post->ID ); ?>
 		</div>
 		<div>
