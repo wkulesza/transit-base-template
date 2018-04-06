@@ -30,7 +30,7 @@
 		
 		var defaultBounds = new google.maps.LatLngBounds(
 			new google.maps.LatLng(bottom_left_lat, bottom_left_lon),
-	        new google.maps.LatLng(top_right_lat, top_left_lon)
+			new google.maps.LatLng(top_right_lat, top_right_lon)
 		);
 
 		var origin_input = document.getElementById('saddr');
