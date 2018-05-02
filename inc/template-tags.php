@@ -4,7 +4,7 @@
  *
  * Eventually, some of the functionality here could be replaced by core features.
  *
- * @package NWOTA
+ * @package Transit_Base_Template
  */
 
 if ( ! function_exists( 'transit_base_template_posted_on' ) ) :
