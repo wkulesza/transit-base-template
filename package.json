@@ -1,0 +1,24 @@
+{
+  "name": "transit-base-template",
+  "version": "1.0.0",
+  "description": "This template is intended as a starting point for developing a GTFS-optimized Wordpress site, specifically for public transit agencies. It works in tandem with the [Transit Custom Posts](https://github.com/trilliumtransit/transit-custom-posts) plugin in order to display automatically generated routes and timetables. You'll also need a publically exported GTFS feed if you want to use its best features.",
+  "main": "index.js",
+  "scripts": {
+    "watch": "sass --watch sass/style.scss:style.css",
+    "build": "sass sass/style.scss:style.css",
+    "test": "sass"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trillium-Solutions/transit-base-template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Trillium-Solutions/transit-base-template/issues"
+  },
+  "homepage": "https://github.com/Trillium-Solutions/transit-base-template#readme",
+  "devDependencies": {
+    "sass": "^1.26.9"
+  }
+}

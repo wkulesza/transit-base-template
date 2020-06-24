@@ -160,7 +160,6 @@ function transit_base_template_scripts() {
 		wp_enqueue_script( 'flatpickr', 'https://cdn.jsdelivr.net/npm/flatpickr', array(), false, true );
 		
 		wp_enqueue_script( 'transit-base-template-planner', get_template_directory_uri() . '/js/planner.js', array('flatpickr'), '20171129', true );
-		
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
