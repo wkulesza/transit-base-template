@@ -11,6 +11,37 @@
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function transit_base_template_customize_register( $wp_customize ) {
+
+	// Add customizer section for transit base theme options
+	$wp_customize->add_section( 'tb_theme_options_section', array(
+        'title'      => 'Transit Base Theme Options',
+		'capability' => 'edit_theme_options',
+		'priority'   => 30
+	) );
+	
+   // Field and control for Google API key
+	$wp_customize->add_setting('tb_theme_google_api_key', array(
+		'default'           =>'',
+		'sanitize_callback' => 'sanitize_text_field',
+	));
+	
+	$wp_customize->add_control('tb_theme_options_control', array(
+		'label'    =>'Google Trip Planner API Key',
+		'type'     =>'text',
+		'section'  =>'tb_theme_options_section',
+		'settings' =>'tb_theme_google_api_key',
+	));
+
+    // Add Custom CSS section to customizer 
+	$wp_customize->add_section( 'custom_css', array(
+		'title' => __( 'Custom CSS' ),
+		'description' => __( 'Add custom CSS here' ),
+		'panel' => '', // Not typically needed.
+		'priority' => 160,
+		'capability' => 'edit_theme_options',
+		'theme_supports' => '', // Rarely needed.
+	  ) );
+
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';

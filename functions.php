@@ -148,12 +148,11 @@ function transit_base_template_scripts() {
 	
 	if ( is_front_page() ) {
 		
-		/*****************************************************************
-		Uncomment and add API key to enable autocomplete on trip planner
-		(Must also edit planner.js to enable)
-		*****************************************************************/
-		
-		// wp_enqueue_script('google-maps', "https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=places", array(), false, true );
+		$google_api_key = get_theme_mod('tb_theme_google_api_key');
+
+		if ( ! empty( $google_api_key ) ) {
+			wp_enqueue_script('google-maps', "https://maps.googleapis.com/maps/api/js?key=" . $google_api_key . "&libraries=places", array(), false, true );
+		}
 		
 		wp_enqueue_style( 'flatpickr-styles', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
 		

@@ -40,8 +40,8 @@
 			componentRestrictions: {country: 'us'}
 		};
 
-		var autocomplete_origin = new google.maps.places.Autocomplete(origin_input, options);    
-		var autocomplete_destination = new google.maps.places.Autocomplete(destination_input, options);
+		var autocomplete_origin      = new google.maps.places.Autocomplete( origin_input, options );    
+		var autocomplete_destination = new google.maps.places.Autocomplete( destination_input, options );
 	}
 	
 	// Hide crosshair icons if the browser does not support geolocation
@@ -86,7 +86,7 @@
 	/***********************************************************
 	Uncomment to add autocomplete (requires API script enqueued)
 	************************************************************/
-	
-	//google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
-	
+	if ( typeof( google ) != 'undefined' && google.maps.places ) {
+		google.maps.event.addDomListener( window, 'load', initializeAutocomplete );
+	}
 })();
