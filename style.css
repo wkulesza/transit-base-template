@@ -760,6 +760,20 @@ a:hover, a:active {
 }
 
 /*--------------------------------------------------------------
+## Collapse styles
+--------------------------------------------------------------*/
+.collapse {
+  display: block;
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+}
+.collapse.show {
+  max-height: 99em;
+  transition: max-height 0.5s ease-in-out;
+}
+
+/*--------------------------------------------------------------
 ## Posts and pages
 --------------------------------------------------------------*/
 .sticky {
@@ -954,9 +968,16 @@ a:hover, a:active {
   font-size: 1rem;
 }
 .tcp_alerts .panel_subheading {
+  margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 13.6px;
   font-size: 0.85rem;
+}
+.tcp_alerts .panel_description {
+  margin-bottom: 1rem;
+}
+.tcp_alerts .tcp_panel {
+  padding: 0.5rem 0;
 }
 
 /*****************

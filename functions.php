@@ -140,6 +140,8 @@ function transit_base_template_scripts() {
 
 	wp_enqueue_script( 'transit-base-template-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
+	wp_enqueue_script( 'transit-base-template-collapse', get_template_directory_uri() . '/js/collapse.js', array(), '20200708', true );
+
 	wp_enqueue_script( 'transit-base-template-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 	
 	/*****************************************************************
