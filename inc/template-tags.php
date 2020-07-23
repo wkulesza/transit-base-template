@@ -115,3 +115,82 @@ function transit_base_template_category_transient_flusher() {
 }
 add_action( 'edit_category', 'transit_base_template_category_transient_flusher' );
 add_action( 'save_post',     'transit_base_template_category_transient_flusher' );
+
+/**
+ * Creates posts/pages from passed array of post objects
+ *
+ * Takes in an array of post/page objects and creates a new page or post for each item.
+ * By default post type is set to page, post status is set to publish, post template
+ * for pages is set to page.php, and post title is set to 'Theme Generated Page - No Title'
+ * You must be logged in as an admin and on the admin side for this function to run.
+ * 
+ * @param array   $args Array of post objects.
+ * @param boolean $use_defaults Auto-generate starter pages. ( Default: false )
+ * @return void.
+ */
+function transit_base_template_create_pages( $args = array(), $use_defaults = false ) {
+
+	// Check to make sure you are not on the front-end and it is an
+	// admin generating the pages.
+	if ( ! is_admin() || ! current_user_can('administrator') ) {
+		// Fail silently
+		return;
+	}
+	
+	// Setting defaults.
+	$defaults = array(
+		array( 
+			'post_title' => 'About',
+		),
+		array( 
+			'post_title' => 'Contact Us',
+		),
+		array( 
+			'post_title' => 'Interactive Map',
+			'page_template' => 'interactive-map.php'
+		),
+	);
+
+	// Checking whether to use defaults or passed in args.
+	if ( $use_defaults ) {
+		$pages = $defaults;
+	} else {
+		$pages = $args;
+	}
+
+	if ( empty( $pages ) ) {
+		// Fail silently
+		return;
+	}
+
+	// Loop through and insert pages.
+	foreach ( $pages as $page ) {
+		
+		// Set post title if not set
+		if ( ! array_key_exists( 'post_title', $page ) ) {
+			$page['post_title'] = 'Theme Generated Page - No Title';
+		}
+
+		// Set post status if not set
+		if ( ! array_key_exists( 'post_status', $page ) ) {
+			$page['post_status'] = 'publish';
+		}
+			
+		// Set post type to page if not set
+		if ( ! array_key_exists('post_type', $page ) ) {
+			$page['post_type'] = 'page';
+		}
+
+		// If post type is page make sure post template is set and if not set it to page.php
+		if ( 'page' == $page['post_type'] && ! array_key_exists('page_template', $page ) ) {
+			$page['page_template'] = 'page.php';
+		}
+
+		$page_exists = get_page_by_title( $page['post_title'] );
+
+		// Check if page_exists and if so, don't create a new one.
+		if ( empty( $page_exists ) ) {
+			wp_insert_post( $page );
+		}
+	}
+}
