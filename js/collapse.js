@@ -12,11 +12,11 @@
 const triggers = Array.from( document.querySelectorAll('[data-toggle="collapse"]') );
 window.addEventListener( 'click', ( ev ) => {
     if ( triggers && triggers.length > 0 ) {
-        ev.preventDefault();
         const elm = ev.target;
         if ( triggers.includes( elm ) ) {
-            const selector = elm.getAttribute('data-target');
-            collapse( selector, 'toggle' );
+          ev.preventDefault();
+          const selector = elm.getAttribute('data-target');
+          collapse( selector, 'toggle' );
         }
     }
 }, false );
