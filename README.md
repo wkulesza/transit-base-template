@@ -24,7 +24,7 @@ You can set the Google API Key for the Trip Planner by going to Appearance > Cus
 
 ### Interactive Map 
 
-An interactive map page template has been included with the theme. If you have a map key,then you can update it by going to Appearance > Customize > Transit Base Theme options within the Wordpress Dashboard. The template will display nothing if a key has not added or working. 
+The interactive map page template has been added that includes an iframe to a separately generated interactive map. If you have a map key, then you can add or update it by going to Appearance > Customize > Transit Base Theme options within the Wordpress Dashboard. The template will display nothing if a key has not been added or is not working.
 
 
 ### Best Practices
