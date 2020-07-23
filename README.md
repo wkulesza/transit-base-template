@@ -20,6 +20,13 @@ Many of the Transit Custom Posts API functions show up in this theme. Have an id
 
 A trip planner form is already packaged and included on the front page, with just enough JavaScript to make it responsive and easy-to-use. It redirects to the Google transit directions service (although can be tailored with some familiarity with the Google Maps API to provide directions on your site). If you have a Google Places API key, you can also enable autocomplete on the form fields and center results around your agency location. 
 
+You can set the Google API Key for the Trip Planner by going to Appearance > Customize > Transit Base Theme options within the Wordpress Dashboard.
+
+### Interactive Map 
+
+An interactive map page template has been included with the theme. If you have a map key,then you can update it by going to Appearance > Customize > Transit Base Theme options within the Wordpress Dashboard. The template will display nothing if a key has not added or working. 
+
+
 ### Best Practices
 
 Because it's based on _s, Automattic's starter theme, this theme benefits from over 1000 hours of development and refinement baked in from the very start. The Transit Base Template continues in that vein, using development best practices whenever possible. We strive to keep it:
@@ -48,6 +55,13 @@ get_svg_icon('light-rail', 'small');
 ## Development Guidelines
 
 Use this theme however you like! It's GPLv2 and yours to hack and modify as you please. We don't currently recommend using it as a parent theme, however, since development is still in flux. Stay tuned for stable release 1.0.0 if you're looking for a stand-alone or parent theme!
+
+A couple of simple functions have been built into the theme for making CSS changes and can be run via NPM. Commands include: 
+- npm run watch - Will transpile CASS and watch for changes
+- npm run build - Will transpile CSS
+- npm test - Tests that sass node module is installed and working 
+
+A collapse function that follows the syntax for Bootstrap's collapse has also been built in for creating easy accordions and hide/show panels. See Bootstrap documentation for how to implement. (https://getbootstrap.com/docs/4.3/components/collapse/)
 
 ## How to Contribute
 

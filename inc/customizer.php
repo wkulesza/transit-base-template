@@ -24,12 +24,25 @@ function transit_base_template_customize_register( $wp_customize ) {
 		'default'           =>'',
 		'sanitize_callback' => 'sanitize_text_field',
 	));
-	
-	$wp_customize->add_control('tb_theme_options_control', array(
+
+	$wp_customize->add_control('tb_theme_google_api_key_control', array(
 		'label'    =>'Google Trip Planner API Key',
 		'type'     =>'text',
 		'section'  =>'tb_theme_options_section',
 		'settings' =>'tb_theme_google_api_key',
+	));
+
+	// Field and control for Interactive Map key
+	$wp_customize->add_setting('tb_theme_interactive_map_key', array(
+		'default'           =>'',
+		'sanitize_callback' => 'sanitize_text_field',
+	));
+
+	$wp_customize->add_control('tb_theme_interactive_map_key_control', array(
+		'label'    =>'Interactive Map Key',
+		'type'     =>'text',
+		'section'  =>'tb_theme_options_section',
+		'settings' =>'tb_theme_interactive_map_key',
 	));
 
     // Add Custom CSS section to customizer 

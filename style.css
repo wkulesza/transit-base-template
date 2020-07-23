@@ -805,6 +805,11 @@ a:hover, a:active {
   margin: 0 0 23.2px;
 }
 
+#full-page-map {
+  width: 100%;
+  min-height: 500px;
+}
+
 /*--------------------------------------------------------------
 ## Transit Custom Post types
 --------------------------------------------------------------*/
@@ -975,9 +980,6 @@ a:hover, a:active {
 }
 .tcp_alerts .panel_description {
   margin-bottom: 1rem;
-}
-.tcp_alerts .tcp_panel {
-  padding: 0.5rem 0;
 }
 
 /*****************
