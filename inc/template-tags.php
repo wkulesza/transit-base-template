@@ -195,31 +195,6 @@ function transit_base_template_create_pages( $args = array(), $use_defaults = fa
 	}
 }
 
-
-// Rewrite main post type to news
-add_filter( 'register_post_type_args', function( $args, $post_type ) {
-	
-	if ( 'post' == $post_type ) {
-	   
-		$args['rewrite'] = array( 
-		   'slug' => 'news',
-		   'with_front' => true,
-		);
-	   
-		$args['labels']  = array(
-		   'name'    => __('News', 'cata'),
-		   'singular_name' => __('News', 'cata'),
-		   'add_new' => __('Add Post', 'news', 'cata'),
-		   'public' => true,
-	   );
-
-	}  
-
-	return $args;
-
-}, 10, 2 );  
-
-
 /**
  * Changes default category 'Uncategorized' to 'News'
  *

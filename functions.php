@@ -226,5 +226,28 @@ function transit_base_template_register_required_plugin() {
 	tgmpa( $plugins, $config );
 }
 
+// Uncomment to rename/change main post type to news
+// add_filter( 'register_post_type_args', function( $args, $post_type ) {
+	
+// 	if ( 'post' == $post_type ) {
+	   
+// 		$args['rewrite'] = array( 
+// 		   'slug' => 'news',
+// 		   'with_front' => true,
+// 		);
+	   
+// 		$args['labels']  = array(
+// 		   'name'    => __('News', 'cata'),
+// 		   'singular_name' => __('News', 'cata'),
+// 		   'add_new' => __('Add Post', 'news', 'cata'),
+// 		   'public' => true,
+// 	   );
+
+// 	}  
+
+// 	return $args;
+
+// }, 10, 2 );
+
 // Uncomment change default category 'Uncategorized' to News
 // add_action('admin_init', 'cata_remove_wp_default_category' );
