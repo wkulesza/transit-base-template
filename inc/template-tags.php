@@ -126,7 +126,7 @@ add_action( 'save_post',     'transit_base_template_category_transient_flusher' 
  * 
  * @param array   $args Array of post objects.
  * @param boolean $use_defaults Auto-generate starter pages. ( Default: false )
- * @return void.
+ * @return void
  */
 function transit_base_template_create_pages( $args = array(), $use_defaults = false ) {
 
@@ -192,5 +192,45 @@ function transit_base_template_create_pages( $args = array(), $use_defaults = fa
 		if ( empty( $page_exists ) ) {
 			wp_insert_post( $page );
 		}
+	}
+}
+
+
+// Rewrite main post type to news
+add_filter( 'register_post_type_args', function( $args, $post_type ) {
+	
+	if ( 'post' == $post_type ) {
+	   
+		$args['rewrite'] = array( 
+		   'slug' => 'news',
+		   'with_front' => true,
+		);
+	   
+		$args['labels']  = array(
+		   'name'    => __('News', 'cata'),
+		   'singular_name' => __('News', 'cata'),
+		   'add_new' => __('Add Post', 'news', 'cata'),
+		   'public' => true,
+	   );
+
+	}  
+
+	return $args;
+
+}, 10, 2 );  
+
+
+/**
+ * Changes default category 'Uncategorized' to 'News'
+ *
+ * @return void
+ */
+function transit_base_template_remove_wp_default_category() {
+	$cat_id = get_cat_ID('Uncategorized');
+	if ( $cat_id ) {	
+		$update = wp_update_term( $cat_id, 'category', array(
+			'name' => __('News', 'transit-base-template'),
+			'slug' => 'news'
+		) );
 	}
 }
