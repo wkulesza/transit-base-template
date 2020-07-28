@@ -744,6 +744,21 @@ a:hover, a:active {
   height: 80px;
 }
 
+#google_translate_element {
+  float: right;
+  margin-top: 20px;
+}
+#google_translate_element a {
+  color: #000000;
+}
+#google_translate_element img, #google_translate_element svg {
+  width: inherit;
+  height: inherit;
+}
+#google_translate_element img:first-child, #google_translate_element svg:first-child {
+  width: 19px;
+}
+
 #colophon {
   background: #1d2731;
   color: #fff;

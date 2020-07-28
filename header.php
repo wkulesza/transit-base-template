@@ -25,7 +25,23 @@
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'transit-base-template' ); ?></a>
 
 	<header id="masthead" class="site-header">
+
+		<!-- Google Translate - Uncomment to add Google Translate Page Option 
+		<div id="google_translate_element"></div> 
+			
+		<script type="text/javascript">
+			function googleTranslateElementInit() {
+				new google.translate.TranslateElement({ 
+					pageLanguage: 'en', 
+					layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+				}, 'google_translate_element' );
+			}
+		</script> -->
+
 		<div id="header-content">
+
+			<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 			<div class="site-branding">
 				<?php
 				the_custom_logo();

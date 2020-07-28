@@ -30,6 +30,23 @@
 	}
 }
 
+#google_translate_element {	
+	float: right;
+	margin-top: 20px;
+	
+	a  {
+		color: #000000;
+	}
+
+	img, svg {
+		width: inherit;
+		height: inherit;
+		&:first-child {
+			width: 19px;
+		}
+	}
+}
+
 #colophon {
 	background: palette(primary, dark);
 	color: #fff;

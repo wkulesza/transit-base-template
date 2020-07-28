@@ -249,5 +249,5 @@ function transit_base_template_register_required_plugin() {
 
 // }, 10, 2 );
 
-// Uncomment change default category 'Uncategorized' to News
+// Uncomment to change default category 'Uncategorized' to News
 // add_action('admin_init', 'cata_remove_wp_default_category' );
