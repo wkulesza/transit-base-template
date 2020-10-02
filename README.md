@@ -63,6 +63,18 @@ A couple of simple functions have been built into the theme for making CSS chang
 
 A collapse function that follows the syntax for Bootstrap's collapse has also been built in for creating easy accordions and hide/show panels. See Bootstrap documentation for how to implement. (https://getbootstrap.com/docs/4.3/components/collapse/)
 
+Basic example of the collapse functionality on a menu structure: 
+```
+<ul id="primary-menu" class="collapse-all">
+<li class="menu-item">
+	<a href="#" role="button" data-toggle="collapse" data-target="#aMenuItemDropdown" aria-expanded="false" aria-controls="aMenuItemDropdown"> A Menu Item</a>
+	<ul id="aMenuItemDropdown" class="sub-menu collapse">
+		<li>Submenu Item</li>
+	</ul>		
+</li>	
+```
+The .collapse-all added to the collapse container element will collapse any open items when a new item is selected. If it is not added, then items will be left open until they are double clicked.
+									
 ## How to Contribute
 
 We welcome contributions in the form of pull-requests, documentation, and bug submission. Feedback and feature enhancement requests are appreciated as well; we're trying to build a theme that will actually get used, and it's our user ideas that matter most! 
