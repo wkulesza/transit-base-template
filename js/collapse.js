@@ -184,26 +184,23 @@ window.addEventListener(
   },
   false
 );
+
 var fnmap = {
   toggle: "toggle",
   show: "add",
   hide: "remove"
 };
 
+var attmap = {
+  toggle: true,
+  show: true,
+  hide: false
+};
+
 var collapse = function collapse(selector, cmd) {
   var targets = Array.from(document.querySelectorAll(selector));
   targets.forEach(function (target) {
     target.classList[fnmap[cmd]]("show");
-    var id = "#" + target.getAttribute("id");
-    var button = document.querySelector('[data-target="' + id + '"]');
-    var expanded = null;
-    if (button) {
-      expanded = button.getAttribute("aria-expanded");
-      if (expanded === "false") {
-        button.setAttribute("aria-expanded", true);
-      } else {
-        button.setAttribute("aria-expanded", false);
-      }
-    }
+    document.querySelector('[data-target="#' + target.getAttribute("id") + '"]').setAttribute("aria-expanded", attmap[cmd]);
   });
 };
