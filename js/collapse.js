@@ -160,17 +160,19 @@ window.addEventListener(
   function (ev) {
     if ( triggers && triggers.length > 0 ) {
       var elm = ev.target;
+      var elmParent = ev.target.parentNode.parentNode;
       if ( collapseAllItems.indexOf( elm ) !== -1 ) {
         ev.preventDefault();
         var selector = elm.getAttribute("data-target");
         collapseAllItems.forEach( function ( collapsibleItem ) {
-          var collapsibleItemSelector = collapsibleItem.getAttribute(
-            "data-target"
-          );
-          if ( selector == collapsibleItemSelector ) {
-            collapse( selector, "toggle" );
-          } else {
-            collapse( collapsibleItemSelector, "hide" );
+          var collapsibleItemParent   = collapsibleItem.parentNode.parentNode;
+          var collapsibleItemSelector = collapsibleItem.getAttribute("data-target");
+          if ( collapsibleItemParent == elmParent ) {
+            if ( selector == collapsibleItemSelector  ) {
+              collapse( selector, "toggle" );
+            } else {
+              collapse( collapsibleItemSelector, "hide" );
+            } 
           }
         });
       } else {
