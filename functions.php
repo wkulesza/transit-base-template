@@ -140,7 +140,12 @@ function transit_base_template_scripts() {
 
 	wp_enqueue_script( 'transit-base-template-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
-	wp_enqueue_script( 'transit-base-template-collapse', get_template_directory_uri() . '/js/collapse.js', array(), '20200708', true );
+	// Load IE JS Polyfills - Down to IE 9
+	if ( isset( $_SERVER['HTTP_USER_AGENT'] ) && ( strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE' ) !== false ) ) {
+		wp_enqueue_script( 'js-polyfills', get_template_directory_uri() . '/js/polyfills.js', array(), '20201106', true );
+	}
+
+	wp_enqueue_script( 'js-collapse', get_template_directory_uri() . '/js/collapse.js', array(), '20201106', true );
 
 	wp_enqueue_script( 'transit-base-template-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 	
