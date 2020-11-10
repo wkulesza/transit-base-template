@@ -231,6 +231,12 @@ function transit_base_template_register_required_plugin() {
 	tgmpa( $plugins, $config );
 }
 
+// Uncomment to customize excerpts more link
+// add_filter('excerpt_more', function( $post ) {
+// 	return '<a href="' . get_post_permalink( $post->ID ) . '" title="' . get_the_title( $post->ID ) . 
+// 	'">' .  __( ' Continue reading <span class="meta-nav"> &rarr;</span>', 'lrta_template' ) . '</a>';
+// });
+
 // Uncomment to remove the words category and archive from 
 // archive page titles
 // add_filter( 'get_the_archive_title', function ($title) {
