@@ -31,3 +31,26 @@
 	width: 100%;
 	min-height: 500px;
 }	
+
+.post {
+	img {
+		margin: 15px 15px 7px 15px;
+	}
+}
+.alignright, .alignleft {
+	width: 35%;
+	max-width: 350px;
+	min-width: 300px;
+	img {
+		margin: 15px 15px 7px 15px;
+	}
+	@media( max-width: 640px ) {
+		width: 97%;
+		max-width: 97%;
+	}
+}
+.wp-caption-text {
+	font-size: .9em;
+	margin: 15px;
+	padding: 0;
+}
