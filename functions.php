@@ -231,6 +231,19 @@ function transit_base_template_register_required_plugin() {
 	tgmpa( $plugins, $config );
 }
 
+// Uncomment to remove the words category and archive from 
+// archive page titles
+// add_filter( 'get_the_archive_title', function ($title) {
+// 	if ( is_category() ) {
+//    		$title = single_cat_title( '', false );
+// 	} elseif ( is_tag() ) {
+// 		$title = single_tag_title( '', false );
+// 	} elseif ( is_author() ) {
+// 		$title = '<span class="vcard">' . get_the_author() . '</span>' ;
+// 	}  
+// 	return $title;
+// });
+
 // Uncomment to rename/change main post type to news
 // add_filter( 'register_post_type_args', function( $args, $post_type ) {
 	
