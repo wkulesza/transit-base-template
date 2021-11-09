@@ -213,7 +213,7 @@ function transit_base_template_register_required_plugin() {
 	$plugins = array( array(
 		'name'			=> 'Transit Custom Posts',
 		'slug'			=> 'transit-custom-posts',
-		'source'		=> 'https://github.com/trilliumtransit/transit-custom-posts/archive/master.zip',
+		'source'		=> 'https://github.com/trilliumtransit/transit-custom-posts/archive/production.zip',
 		'required'		=> true,
 		'external_url' 	=> 'https://github.com/trilliumtransit/transit-custom-posts'
 	) );
